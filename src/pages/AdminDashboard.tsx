@@ -14,6 +14,9 @@ import {
   Users,
   AlertCircle,
   QrCode,
+  CreditCard,
+  CheckSquare,
+  Square,
 } from "lucide-react";
 import Button from "@/components/Button";
 import Card from "@/components/Card";
@@ -25,7 +28,7 @@ import { useAuth } from "@/context/AuthContext";
 import { api } from "@/lib/api";
 import { exportVisitorsCsv, exportVisitorsExcel } from "@/lib/exporters";
 import { generateQrDataUrl } from "@/lib/qr";
-import { downloadBadgePdf } from "@/lib/pdf";
+import { downloadBadgePdf, downloadVisitorsPdf } from "@/lib/pdf";
 import {
   DEPARTMENTS,
   VISITOR_STATUSES,
@@ -46,6 +49,7 @@ export default function AdminDashboard() {
   const [editing, setEditing] = useState<Visitor | null>(null);
   const [deleting, setDeleting] = useState<Visitor | null>(null);
   const [badgeVisitor, setBadgeVisitor] = useState<Visitor | null>(null);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
 
   const [qrForBadge, setQrForBadge] = useState<string>("");
   const [actionLoading, setActionLoading] = useState(false);
@@ -136,6 +140,26 @@ export default function AdminDashboard() {
     }
     setActionLoading(false);
   };
+
+  const toggleSelect = (id: string) => {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    setSelected((prev) =>
+      prev.size === filtered.length ? new Set() : new Set(filtered.map((v) => v.visitorId)),
+    );
+  };
+
+  const selectedVisitors = useMemo(
+    () => filtered.filter((v) => selected.has(v.visitorId)),
+    [filtered, selected],
+  );
 
   const openBadge = async (v: Visitor) => {
     setBadgeVisitor(v);
@@ -239,20 +263,29 @@ export default function AdminDashboard() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => exportVisitorsExcel(filtered)}
-              leftIcon={<FileSpreadsheet size={15} />}
+              onClick={() => downloadVisitorsPdf(selectedVisitors.length > 0 ? selectedVisitors : filtered)}
+              leftIcon={<FileText size={15} />}
               disabled={filtered.length === 0}
             >
-              Export Excel
+              {selected.size > 0 ? `Export PDF (${selected.size})` : "Export PDF"}
             </Button>
             <Button
               variant="outline"
               size="sm"
-              onClick={() => exportVisitorsCsv(filtered)}
+              onClick={() => exportVisitorsExcel(selectedVisitors.length > 0 ? selectedVisitors : filtered)}
+              leftIcon={<FileSpreadsheet size={15} />}
+              disabled={filtered.length === 0}
+            >
+              {selected.size > 0 ? `Export Excel (${selected.size})` : "Export Excel"}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => exportVisitorsCsv(selectedVisitors.length > 0 ? selectedVisitors : filtered)}
               leftIcon={<FileText size={15} />}
               disabled={filtered.length === 0}
             >
-              Export CSV
+              {selected.size > 0 ? `Export CSV (${selected.size})` : "Export CSV"}
             </Button>
           </div>
         </div>
@@ -282,6 +315,15 @@ export default function AdminDashboard() {
             <table className="w-full text-left text-sm">
               <thead className="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-500 dark:border-slate-700 dark:bg-slate-800/50 dark:text-slate-400">
                 <tr>
+                  <Th className="w-10">
+                    <button
+                      title={selected.size === filtered.length && filtered.length > 0 ? "Deselect all" : "Select all"}
+                      onClick={toggleSelectAll}
+                      className="text-slate-400 hover:text-blue-600 transition-colors"
+                    >
+                      {selected.size === filtered.length && filtered.length > 0 ? <CheckSquare size={16} /> : <Square size={16} />}
+                    </button>
+                  </Th>
                   <Th>Visitor ID</Th>
                   <Th>Name</Th>
                   <Th>Department</Th>
@@ -296,8 +338,17 @@ export default function AdminDashboard() {
                 {filtered.map((v) => (
                   <tr
                     key={v.visitorId}
-                    className="transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/40"
+                    className={`transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/40 ${selected.has(v.visitorId) ? "bg-blue-50/60 dark:bg-blue-900/15" : ""}`}
                   >
+                    <td className="px-4 py-3">
+                      <button
+                        title={selected.has(v.visitorId) ? "Deselect" : "Select"}
+                        onClick={() => toggleSelect(v.visitorId)}
+                        className={selected.has(v.visitorId) ? "text-blue-600" : "text-slate-400 hover:text-blue-600 transition-colors"}
+                      >
+                        {selected.has(v.visitorId) ? <CheckSquare size={16} /> : <Square size={16} />}
+                      </button>
+                    </td>
                     <td className="px-4 py-3 font-mono text-xs text-slate-600 dark:text-slate-300">
                       {v.visitorId}
                     </td>
@@ -326,10 +377,10 @@ export default function AdminDashboard() {
                     <td className="px-4 py-3">
                       <div className="flex justify-end gap-1">
                         <IconButton
-                          title="Print / view badge"
+                          title="View / print badge"
                           onClick={() => openBadge(v)}
                         >
-                          <Printer size={16} />
+                          <CreditCard size={16} />
                         </IconButton>
                         <IconButton
                           title="Edit"
