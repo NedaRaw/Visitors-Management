@@ -56,8 +56,16 @@ export const PURPOSES = [
 ] as const;
 
 // Visit status values.
+// "Pending"  — registered, awaiting admin approval.
+// "Approved" — admin approved the visit; visitor may check in.
+// "Rejected" — admin denied the visit request.
+// "Checked In"  — visitor arrived and checked in at the desk.
+// "Checked Out" — visitor left the premises.
+// "Expired"     — visit date passed without action.
 export const VISITOR_STATUSES = [
   "Pending",
+  "Approved",
+  "Rejected",
   "Checked In",
   "Checked Out",
   "Expired",

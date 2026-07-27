@@ -18,6 +18,8 @@ import {
   CheckSquare,
   Square,
   ShieldCheck,
+  Check,
+  X,
 } from "lucide-react";
 import Button from "@/components/Button";
 import Card from "@/components/Card";
@@ -96,6 +98,7 @@ export default function AdminDashboard() {
       total: visitors.length,
       today: visitors.filter((v) => v.visitDate === today).length,
       pending: visitors.filter((v) => v.status === "Pending").length,
+      approved: visitors.filter((v) => v.status === "Approved").length,
       checkedIn: visitors.filter((v) => v.status === "Checked In").length,
     };
   }, [visitors]);
@@ -232,11 +235,12 @@ export default function AdminDashboard() {
       {tab === "visitors" && (
         <>
       {/* Stats */}
-      <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-5">
         <StatCard label="Total Visitors" value={stats.total} icon={<Users size={18} />} tone="blue" />
         <StatCard label="Today" value={stats.today} icon={<CalendarDays size={18} />} tone="emerald" />
         <StatCard label="Pending" value={stats.pending} icon={<Filter size={18} />} tone="amber" />
-        <StatCard label="Checked In" value={stats.checkedIn} icon={<Users size={18} />} tone="indigo" />
+        <StatCard label="Approved" value={stats.approved} icon={<Check size={18} />} tone="sky" />
+        <StatCard label="Checked In" value={stats.checkedIn} icon={<Users size={18} />} tone="emerald" />
       </div>
 
       {/* Filters */}
@@ -395,11 +399,33 @@ export default function AdminDashboard() {
                       {v.arrivalTime}
                     </td>
                     <td className="px-4 py-3">
-                      <StatusSelect
-                        status={v.status}
-                        onChange={(s) => handleStatusChange(v, s)}
-                        disabled={actionLoading}
-                      />
+                      <div className="flex items-center gap-2">
+                        <StatusSelect
+                          status={v.status}
+                          onChange={(s) => handleStatusChange(v, s)}
+                          disabled={actionLoading}
+                        />
+                        {v.status === "Pending" && (
+                          <>
+                            <button
+                              title="Approve visit"
+                              onClick={() => handleStatusChange(v, "Approved")}
+                              disabled={actionLoading}
+                              className="rounded-lg p-1.5 text-emerald-600 transition-colors hover:bg-emerald-50 dark:hover:bg-emerald-900/30 disabled:opacity-50"
+                            >
+                              <Check size={16} />
+                            </button>
+                            <button
+                              title="Reject visit"
+                              onClick={() => handleStatusChange(v, "Rejected")}
+                              disabled={actionLoading}
+                              className="rounded-lg p-1.5 text-red-600 transition-colors hover:bg-red-50 dark:hover:bg-red-900/30 disabled:opacity-50"
+                            >
+                              <X size={16} />
+                            </button>
+                          </>
+                        )}
+                      </div>
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex justify-end gap-1">
@@ -608,15 +634,14 @@ function StatCard({
   label: string;
   value: number;
   icon: React.ReactNode;
-  tone: "blue" | "emerald" | "amber" | "indigo";
+  tone: "blue" | "emerald" | "amber" | "sky";
 }) {
   const tones = {
     blue: "bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300",
     emerald:
       "bg-emerald-50 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-300",
     amber: "bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-300",
-    indigo:
-      "bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-300",
+    sky: "bg-sky-50 text-sky-600 dark:bg-sky-900/30 dark:text-sky-300",
   }[tone];
   return (
     <Card className="flex items-center gap-3 p-4">

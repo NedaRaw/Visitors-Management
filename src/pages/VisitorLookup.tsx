@@ -7,6 +7,9 @@ import {
   Printer,
   Download,
   Home,
+  Clock,
+  XCircle,
+  ShieldCheck,
 } from "lucide-react";
 import Button from "@/components/Button";
 import Card from "@/components/Card";
@@ -81,6 +84,10 @@ export default function VisitorLookup({ visitorId, onHome }: VisitorLookupProps)
     );
   }
 
+  const isApproved = visitor.status === "Approved";
+  const isPending = visitor.status === "Pending";
+  const isRejected = visitor.status === "Rejected";
+
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 print:py-0">
       <div className="no-print mb-6 text-center">
@@ -98,6 +105,44 @@ export default function VisitorLookup({ visitorId, onHome }: VisitorLookupProps)
           <StatusBadge status={visitor.status} />
         </div>
       </div>
+
+      {/* Approval banner */}
+      {isApproved && (
+        <div className="no-print mb-6 flex items-center gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-800 dark:border-emerald-800/50 dark:bg-emerald-900/20 dark:text-emerald-300">
+          <ShieldCheck size={24} className="shrink-0" />
+          <div>
+            <p className="font-semibold">Visit Approved</p>
+            <p className="text-sm opacity-90">
+              This visitor has been authorized by the administrator and may
+              proceed to check in.
+            </p>
+          </div>
+        </div>
+      )}
+      {isPending && (
+        <div className="no-print mb-6 flex items-center gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-amber-800 dark:border-amber-800/50 dark:bg-amber-900/20 dark:text-amber-300">
+          <Clock size={24} className="shrink-0" />
+          <div>
+            <p className="font-semibold">Awaiting Approval</p>
+            <p className="text-sm opacity-90">
+              This visit request has been submitted and is waiting for an
+              administrator to approve it.
+            </p>
+          </div>
+        </div>
+      )}
+      {isRejected && (
+        <div className="no-print mb-6 flex items-center gap-3 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-800 dark:border-red-800/50 dark:bg-red-900/20 dark:text-red-300">
+          <XCircle size={24} className="shrink-0" />
+          <div>
+            <p className="font-semibold">Visit Rejected</p>
+            <p className="text-sm opacity-90">
+              This visit request has been denied by the administrator. Please
+              contact the front desk for more information.
+            </p>
+          </div>
+        </div>
+      )}
 
       <div className="grid items-start gap-6 lg:grid-cols-2">
         <Card className="no-print p-6">
