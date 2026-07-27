@@ -45,9 +45,9 @@ export default function HomePage({ onRegister }: HomePageProps) {
             <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Button
                 size="lg"
+                variant="light"
                 onClick={onRegister}
                 rightIcon={<ArrowRight size={18} />}
-                className="bg-white text-blue-700 hover:bg-blue-50 shadow-xl shadow-blue-900/30"
               >
                 Register as a Visitor
               </Button>
@@ -201,9 +201,9 @@ export default function HomePage({ onRegister }: HomePageProps) {
           <div className="mt-8 flex justify-center">
             <Button
               size="lg"
+              variant="light"
               onClick={onRegister}
               rightIcon={<ArrowRight size={18} />}
-              className="bg-white text-blue-700 hover:bg-blue-50 shadow-xl shadow-blue-900/30"
             >
               Start Registration
             </Button>
