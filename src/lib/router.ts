@@ -11,6 +11,7 @@ import { useEffect, useState, useCallback } from "react";
 // ============================================================
 
 export type Route =
+  | { name: "home" }
   | { name: "register" }
   | { name: "success" }
   | { name: "visitor"; visitorId: string }
@@ -18,12 +19,13 @@ export type Route =
 
 export function parseHash(): Route {
   const hash = window.location.hash.replace(/^#/, "") || "/";
-  if (hash === "/" || hash === "") return { name: "register" };
+  if (hash === "/" || hash === "/home" || hash === "") return { name: "home" };
+  if (hash === "/register") return { name: "register" };
   if (hash === "/success") return { name: "success" };
   const visitorMatch = hash.match(/^\/visitor\/(.+)$/);
   if (visitorMatch) return { name: "visitor", visitorId: visitorMatch[1] };
   if (hash.startsWith("/admin")) return { name: "admin" };
-  return { name: "register" };
+  return { name: "home" };
 }
 
 export function navigate(path: string, state?: unknown) {

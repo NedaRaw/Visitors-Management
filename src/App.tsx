@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { useRouter } from "@/lib/router";
 import SiteHeader from "@/components/SiteHeader";
+import HomePage from "@/pages/HomePage";
 import RegistrationForm from "@/pages/RegistrationForm";
 import SuccessPage from "@/pages/SuccessPage";
 import VisitorLookup from "@/pages/VisitorLookup";
@@ -24,6 +25,8 @@ function AppRoutes() {
 
   const renderRoute = () => {
     switch (route.name) {
+      case "home":
+        return <HomePage onRegister={() => go("/register")} />;
       case "register":
         return <RegistrationForm onRegistered={handleRegistered} />;
       case "success":
@@ -44,7 +47,7 @@ function AppRoutes() {
       case "admin":
         return isAuthenticated ? <AdminDashboard /> : <AdminLogin />;
       default:
-        return <RegistrationForm onRegistered={handleRegistered} />;
+        return <HomePage onRegister={() => go("/register")} />;
     }
   };
 
