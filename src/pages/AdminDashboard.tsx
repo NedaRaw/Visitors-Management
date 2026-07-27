@@ -17,6 +17,7 @@ import {
   CreditCard,
   CheckSquare,
   Square,
+  ShieldCheck,
 } from "lucide-react";
 import Button from "@/components/Button";
 import Card from "@/components/Card";
@@ -35,9 +36,13 @@ import {
   type VisitorStatus,
 } from "@/config/app.config";
 import type { Visitor } from "@/types/visitor";
+import UserManagement from "@/pages/UserManagement";
+
+type Tab = "visitors" | "users";
 
 export default function AdminDashboard() {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
+  const [tab, setTab] = useState<Tab>("visitors");
   const [visitors, setVisitors] = useState<Visitor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -178,21 +183,25 @@ export default function AdminDashboard() {
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 dark:text-white">
-            Visitor Dashboard
+            {tab === "visitors" ? "Visitor Dashboard" : "User Management"}
           </h1>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            Manage and track all laboratory visitors.
+            {tab === "visitors"
+              ? "Manage and track all laboratory visitors."
+              : "Create accounts and assign admin or user access."}
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={loadVisitors}
-            leftIcon={<RefreshCw size={15} />}
-          >
-            Refresh
-          </Button>
+          {tab === "visitors" && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={loadVisitors}
+              leftIcon={<RefreshCw size={15} />}
+            >
+              Refresh
+            </Button>
+          )}
           <Button
             variant="ghost"
             size="sm"
@@ -204,6 +213,24 @@ export default function AdminDashboard() {
         </div>
       </div>
 
+      {/* Tabs (admin only) */}
+      {user?.role === "admin" && (
+        <div className="mb-6 flex gap-1 border-b border-slate-200 dark:border-slate-700">
+          <TabButton active={tab === "visitors"} onClick={() => setTab("visitors")} icon={<Users size={16} />}>
+            Visitors
+          </TabButton>
+          <TabButton active={tab === "users"} onClick={() => setTab("users")} icon={<ShieldCheck size={16} />}>
+            User Accounts
+          </TabButton>
+        </div>
+      )}
+
+      {/* User management tab */}
+      {tab === "users" && user?.role === "admin" && <UserManagement />}
+
+      {/* Visitors tab */}
+      {tab === "visitors" && (
+        <>
       {/* Stats */}
       <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <StatCard label="Total Visitors" value={stats.total} icon={<Users size={18} />} tone="blue" />
@@ -487,7 +514,35 @@ export default function AdminDashboard() {
           </div>
         )}
       </Modal>
+        </>
+      )}
     </div>
+  );
+}
+
+function TabButton({
+  active,
+  onClick,
+  children,
+  icon,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+  icon: React.ReactNode;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex items-center gap-2 border-b-2 px-4 py-2.5 text-sm font-medium transition-colors ${
+        active
+          ? "border-blue-600 text-blue-600 dark:text-blue-400"
+          : "border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200"
+      }`}
+    >
+      {icon}
+      {children}
+    </button>
   );
 }
 

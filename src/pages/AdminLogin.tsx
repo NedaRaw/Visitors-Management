@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { Lock, User, ShieldCheck, AlertCircle } from "lucide-react";
+import { Lock, User, ShieldCheck, AlertCircle, Loader2 } from "lucide-react";
 import Button from "@/components/Button";
 import Card from "@/components/Card";
 import { useAuth } from "@/context/AuthContext";
@@ -9,17 +9,20 @@ export default function AdminLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
     if (!username.trim() || !password) {
       setError("Please enter your username and password.");
       return;
     }
-    const ok = login(username.trim(), password);
-    if (!ok) {
-      setError("Invalid credentials. Please try again.");
+    setLoading(true);
+    const result = await login(username.trim(), password);
+    setLoading(false);
+    if (!result.ok) {
+      setError(result.error || "Invalid credentials. Please try again.");
     }
   };
 
@@ -53,6 +56,7 @@ export default function AdminLogin() {
                 className="h-11 w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3 text-sm text-slate-800 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 dark:border-slate-600 dark:bg-slate-900 dark:text-white"
                 placeholder="admin"
                 autoComplete="username"
+                disabled={loading}
               />
             </div>
           </div>
@@ -71,6 +75,7 @@ export default function AdminLogin() {
                 className="h-11 w-full rounded-xl border border-slate-300 bg-white pl-10 pr-3 text-sm text-slate-800 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 dark:border-slate-600 dark:bg-slate-900 dark:text-white"
                 placeholder="••••••••"
                 autoComplete="current-password"
+                disabled={loading}
               />
             </div>
           </div>
@@ -82,8 +87,15 @@ export default function AdminLogin() {
             </div>
           )}
 
-          <Button type="submit" size="lg" fullWidth>
-            Sign In
+          <Button type="submit" size="lg" fullWidth disabled={loading}>
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <Loader2 size={18} className="animate-spin" />
+                Signing in…
+              </span>
+            ) : (
+              "Sign In"
+            )}
           </Button>
         </form>
       </Card>

@@ -14,11 +14,11 @@ export const GOOGLE_SCRIPT_URL =
 // lookup URL like: https://your-domain.com/visitor/LAB-2026-000001
 export const PUBLIC_DOMAIN = "https://your-domain.com";
 
-// Admin dashboard accounts. Change these before going live.
-// Add as many accounts as you need — each has its own username and password.
-export const ADMIN_CREDENTIALS = [
-  { username: "admin", password: "najran2026" },
-];
+// Admin and user accounts are now managed in the database via the
+// User Management panel in the admin dashboard. The primary admin
+// (username: "admin", password: "najran2026") is auto-created on first
+// login. Change the primary admin's password from the User Management
+// screen after your first sign-in.
 
 // Laboratory branding shown on the badge and across the app.
 export const LAB_INFO = {
