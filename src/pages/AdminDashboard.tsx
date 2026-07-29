@@ -20,6 +20,8 @@ import {
   ShieldCheck,
   Check,
   X,
+  Star,
+  Mail,
 } from "lucide-react";
 import Button from "@/components/Button";
 import Card from "@/components/Card";
@@ -39,8 +41,10 @@ import {
 } from "@/config/app.config";
 import type { Visitor } from "@/types/visitor";
 import UserManagement from "@/pages/UserManagement";
+import SurveyManagement from "@/pages/SurveyManagement";
+import EnquiryManagement from "@/pages/EnquiryManagement";
 
-type Tab = "visitors" | "users";
+type Tab = "visitors" | "users" | "surveys" | "enquiries";
 
 export default function AdminDashboard() {
   const { logout, user } = useAuth();
@@ -186,18 +190,22 @@ export default function AdminDashboard() {
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 dark:text-white">
-            {tab === "visitors" ? "Visitor Dashboard" : "User Management"}
+            {tab === "visitors" && "Visitor Dashboard"}
+            {tab === "users" && "User Management"}
+            {tab === "surveys" && "Survey Responses"}
+            {tab === "enquiries" && "Enquiries"}
           </h1>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            {tab === "visitors"
-              ? "Manage and track all laboratory visitors."
-              : "Create accounts and assign admin or user access."}
+            {tab === "visitors" && "Manage and track all laboratory visitors."}
+            {tab === "users" && "Create accounts and assign admin or user access."}
+            {tab === "surveys" && "Review customer satisfaction survey responses."}
+            {tab === "enquiries" && "Review and manage customer service enquiries."}
           </p>
         </div>
         <div className="flex items-center gap-2">
           {tab === "visitors" && (
             <Button
-              variant="outline"
+n              variant="outline"
               size="sm"
               onClick={loadVisitors}
               leftIcon={<RefreshCw size={15} />}
@@ -218,9 +226,15 @@ export default function AdminDashboard() {
 
       {/* Tabs (admin only) */}
       {user?.role === "admin" && (
-        <div className="mb-6 flex gap-1 border-b border-slate-200 dark:border-slate-700">
+        <div className="mb-6 flex flex-wrap gap-1 border-b border-slate-200 dark:border-slate-700">
           <TabButton active={tab === "visitors"} onClick={() => setTab("visitors")} icon={<Users size={16} />}>
             Visitors
+          </TabButton>
+          <TabButton active={tab === "surveys"} onClick={() => setTab("surveys")} icon={<Star size={16} />}>
+            Surveys
+          </TabButton>
+          <TabButton active={tab === "enquiries"} onClick={() => setTab("enquiries")} icon={<Mail size={16} />}>
+            Enquiries
           </TabButton>
           <TabButton active={tab === "users"} onClick={() => setTab("users")} icon={<ShieldCheck size={16} />}>
             User Accounts
@@ -230,6 +244,12 @@ export default function AdminDashboard() {
 
       {/* User management tab */}
       {tab === "users" && user?.role === "admin" && <UserManagement />}
+
+      {/* Surveys tab */}
+      {tab === "surveys" && user?.role === "admin" && <SurveyManagement />}
+
+      {/* Enquiries tab */}
+      {tab === "enquiries" && user?.role === "admin" && <EnquiryManagement />}
 
       {/* Visitors tab */}
       {tab === "visitors" && (
