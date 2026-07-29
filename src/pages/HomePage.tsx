@@ -12,15 +12,18 @@ import {
   Users,
   QrCode,
   Building2,
+  Star,
+  MessageSquare,
 } from "lucide-react";
 import Button from "@/components/Button";
 import { LAB_INFO } from "@/config/app.config";
 
 interface HomePageProps {
   onRegister: () => void;
+  onSurvey: () => void;
 }
 
-export default function HomePage({ onRegister }: HomePageProps) {
+export default function HomePage({ onRegister, onSurvey }: HomePageProps) {
   return (
     <div>
       {/* Hero */}
@@ -50,6 +53,15 @@ export default function HomePage({ onRegister }: HomePageProps) {
                 rightIcon={<ArrowRight size={18} />}
               >
                 Register as a Visitor
+              </Button>
+              <Button
+                size="lg"
+                variant="ghost"
+                onClick={onSurvey}
+                leftIcon={<Star size={18} />}
+                className="border border-white/30 text-white hover:bg-white/10"
+              >
+                Take Our Survey
               </Button>
             </div>
           </div>
@@ -183,6 +195,34 @@ export default function HomePage({ onRegister }: HomePageProps) {
                 Visitor registration is available 24/7 online. On-site
                 check-in is available Sunday–Thursday, 8:00 AM – 4:00 PM.
               </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Survey CTA */}
+      <section className="bg-white py-16 dark:bg-slate-900 sm:py-20">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 to-blue-800 p-8 text-center shadow-lg sm:p-12">
+            <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 ring-1 ring-white/20 backdrop-blur-sm">
+              <MessageSquare size={26} className="text-white" />
+            </div>
+            <h2 className="text-2xl font-bold text-white sm:text-3xl">
+              We Value Your Feedback
+            </h2>
+            <p className="mx-auto mt-3 max-w-xl text-blue-100">
+              Help us improve our services by taking a short customer
+              satisfaction survey. It only takes 1–3 minutes.
+            </p>
+            <div className="mt-7 flex justify-center">
+              <Button
+                size="lg"
+                variant="light"
+                onClick={onSurvey}
+                rightIcon={<ArrowRight size={18} />}
+              >
+                Start the Survey
+              </Button>
             </div>
           </div>
         </div>

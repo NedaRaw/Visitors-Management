@@ -7,6 +7,7 @@ import HomePage from "@/pages/HomePage";
 import RegistrationForm from "@/pages/RegistrationForm";
 import SuccessPage from "@/pages/SuccessPage";
 import VisitorLookup from "@/pages/VisitorLookup";
+import SurveyPage from "@/pages/SurveyPage";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
 import type { Visitor } from "@/types/visitor";
@@ -26,7 +27,12 @@ function AppRoutes() {
   const renderRoute = () => {
     switch (route.name) {
       case "home":
-        return <HomePage onRegister={() => go("/register")} />;
+        return (
+          <HomePage
+            onRegister={() => go("/register")}
+            onSurvey={() => go("/survey")}
+          />
+        );
       case "register":
         return <RegistrationForm onRegistered={handleRegistered} />;
       case "success":
@@ -44,10 +50,17 @@ function AppRoutes() {
         return (
           <VisitorLookup visitorId={route.visitorId} onHome={() => go("/")} />
         );
+      case "survey":
+        return <SurveyPage onHome={() => go("/")} />;
       case "admin":
         return isAuthenticated ? <AdminDashboard /> : <AdminLogin />;
       default:
-        return <HomePage onRegister={() => go("/register")} />;
+        return (
+          <HomePage
+            onRegister={() => go("/register")}
+            onSurvey={() => go("/survey")}
+          />
+        );
     }
   };
 

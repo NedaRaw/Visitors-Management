@@ -15,12 +15,14 @@ export type Route =
   | { name: "register" }
   | { name: "success" }
   | { name: "visitor"; visitorId: string }
+  | { name: "survey" }
   | { name: "admin" };
 
 export function parseHash(): Route {
   const hash = window.location.hash.replace(/^#/, "") || "/";
   if (hash === "/" || hash === "/home" || hash === "") return { name: "home" };
   if (hash === "/register") return { name: "register" };
+  if (hash === "/survey") return { name: "survey" };
   if (hash === "/success") return { name: "success" };
   const visitorMatch = hash.match(/^\/visitor\/(.+)$/);
   if (visitorMatch) return { name: "visitor", visitorId: visitorMatch[1] };
