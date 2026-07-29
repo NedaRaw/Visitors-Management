@@ -16,6 +16,7 @@ export type Route =
   | { name: "success" }
   | { name: "visitor"; visitorId: string }
   | { name: "survey" }
+  | { name: "enquiry" }
   | { name: "admin" };
 
 export function parseHash(): Route {
@@ -23,6 +24,7 @@ export function parseHash(): Route {
   if (hash === "/" || hash === "/home" || hash === "") return { name: "home" };
   if (hash === "/register") return { name: "register" };
   if (hash === "/survey") return { name: "survey" };
+  if (hash === "/enquiry") return { name: "enquiry" };
   if (hash === "/success") return { name: "success" };
   const visitorMatch = hash.match(/^\/visitor\/(.+)$/);
   if (visitorMatch) return { name: "visitor", visitorId: visitorMatch[1] };

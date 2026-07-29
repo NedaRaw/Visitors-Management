@@ -14,6 +14,7 @@ import {
   Building2,
   Star,
   MessageSquare,
+  Send,
 } from "lucide-react";
 import Button from "@/components/Button";
 import { LAB_INFO } from "@/config/app.config";
@@ -21,9 +22,10 @@ import { LAB_INFO } from "@/config/app.config";
 interface HomePageProps {
   onRegister: () => void;
   onSurvey: () => void;
+  onEnquiry: () => void;
 }
 
-export default function HomePage({ onRegister, onSurvey }: HomePageProps) {
+export default function HomePage({ onRegister, onSurvey, onEnquiry }: HomePageProps) {
   return (
     <div>
       {/* Hero */}
@@ -222,6 +224,34 @@ export default function HomePage({ onRegister, onSurvey }: HomePageProps) {
                 rightIcon={<ArrowRight size={18} />}
               >
                 Start the Survey
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Enquiry CTA */}
+      <section className="bg-slate-50 py-16 dark:bg-slate-900/50 sm:py-20">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
+          <div className="relative overflow-hidden rounded-3xl border border-blue-200 bg-gradient-to-br from-white to-blue-50 p-8 text-center shadow-sm dark:border-blue-800/40 dark:from-slate-800 dark:to-slate-800 sm:p-12">
+            <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-600/20">
+              <Send size={26} />
+            </div>
+            <h2 className="text-2xl font-bold text-slate-800 dark:text-white sm:text-3xl">
+              Send an Enquiry
+            </h2>
+            <p className="mx-auto mt-3 max-w-xl text-slate-500 dark:text-slate-400">
+              Need a specific service or solution? Submit your requirement and
+              our team will respond within one business day.
+            </p>
+            <div className="mt-7 flex justify-center">
+              <Button
+                size="lg"
+                variant="primary"
+                onClick={onEnquiry}
+                rightIcon={<ArrowRight size={18} />}
+              >
+                Send Your Enquiry
               </Button>
             </div>
           </div>

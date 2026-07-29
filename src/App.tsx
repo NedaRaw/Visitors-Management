@@ -8,6 +8,7 @@ import RegistrationForm from "@/pages/RegistrationForm";
 import SuccessPage from "@/pages/SuccessPage";
 import VisitorLookup from "@/pages/VisitorLookup";
 import SurveyPage from "@/pages/SurveyPage";
+import EnquiryPage from "@/pages/EnquiryPage";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
 import type { Visitor } from "@/types/visitor";
@@ -31,6 +32,7 @@ function AppRoutes() {
           <HomePage
             onRegister={() => go("/register")}
             onSurvey={() => go("/survey")}
+            onEnquiry={() => go("/enquiry")}
           />
         );
       case "register":
@@ -52,6 +54,8 @@ function AppRoutes() {
         );
       case "survey":
         return <SurveyPage onHome={() => go("/")} />;
+      case "enquiry":
+        return <EnquiryPage onHome={() => go("/")} />;
       case "admin":
         return isAuthenticated ? <AdminDashboard /> : <AdminLogin />;
       default:
@@ -59,6 +63,7 @@ function AppRoutes() {
           <HomePage
             onRegister={() => go("/register")}
             onSurvey={() => go("/survey")}
+            onEnquiry={() => go("/enquiry")}
           />
         );
     }
