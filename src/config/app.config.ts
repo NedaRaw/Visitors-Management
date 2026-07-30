@@ -23,10 +23,15 @@ export const PUBLIC_DOMAIN = "https://your-domain.com";
 // Laboratory branding shown on the badge and across the app.
 export const LAB_INFO = {
   name: "Najran Central Laboratory",
-  tagline: "National Water Company",
-  address: "Najran, Kingdom of Saudi Arabia",
-  phone: "+966 17 000 0000",
-  email: "visitors@nwc.com.sa",
+  nameAr: "المختبر المركزي لنجران",
+  tagline: "For Water and Environmental Services",
+  taglineAr: "للمياه والخدمات البيئية",
+  accreditation: "Accredited ISO/IEC 17025:2017",
+  address: "حي المنجم – طريق الملك عبد العزيز – خلف مستشفى الظافر – نجران",
+  addressEn: "Al Munjim District, King Abdulaziz Rd, behind Al Dhafir Hospital, Najran",
+  phone: "+966568982662",
+  email: "moalsaed.c@new.com.sa",
+  operator: "National Water Company",
 };
 
 // Department / Laboratory options presented in the registration form.
