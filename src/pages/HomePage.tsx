@@ -78,7 +78,7 @@ export default function HomePage({ onRegister, onSurvey, onEnquiry }: HomePagePr
             <div className="relative hidden lg:block">
               <div className="relative rounded-3xl bg-white/10 p-8 ring-1 ring-white/20 backdrop-blur-sm">
                 <img
-                  src="/flyer labo-30-7-2026.png"
+                  src="/flyer_labo-30-7-2026.png"
                   alt="Laboratory flyer"
                   className="mx-auto max-h-[460px] w-auto rounded-2xl object-contain shadow-2xl"
                 />
